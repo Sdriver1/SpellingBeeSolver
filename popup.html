@@ -1,0 +1,212 @@
+<!--
+  popup.html — Side panel UI for the NY Times Spelling Bee Solver.
+
+  Structure:
+    #lettersDisplay  — Shows the 7 puzzle letters once extracted.
+    .controls        — "Get Letters" and "Get Answers" buttons.
+    .filter-controls — Min/max word length inputs and sort order dropdown.
+    #wordList        — Scrollable list of matching words; hidden until first search.
+    #status          — Status/result summary line at the bottom.
+
+  All interactivity is handled by popup.js.
+-->
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spelling Bee Solver</title>
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+        }
+
+        body {
+            padding: 16px;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 12px;
+        }
+
+        .header h3 {
+            margin: 0;
+        }
+
+        .letters-display {
+            text-align: center;
+            margin: 12px 0;
+        }
+
+        .center-letter {
+            font-size: 24px;
+            font-weight: bold;
+            color: #f7da21;
+            background: #000;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 4px;
+        }
+
+        .outer-letter {
+            font-size: 20px;
+            color: #000;
+            background: #e6e6e6;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 3px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 8px;
+            margin: 12px 0;
+        }
+
+        .btn {
+            flex: 1;
+            background: #326891;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        #actualAnswersBtn {
+            background: #d4491e;
+        }
+
+        .btn:hover:not(:disabled) {
+            background: #2a5a7a;
+            opacity: 0.9;
+        }
+
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .filter-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px 16px;
+            margin: 8px 0;
+            align-items: center;
+        }
+
+        .filter-controls label {
+            font-size: 12px;
+        }
+
+        .filter-controls input[type="number"] {
+            width: 46px;
+            padding: 2px;
+            margin-left: 4px;
+        }
+
+        .filter-controls select {
+            margin-left: 4px;
+            font-size: 12px;
+            padding: 2px;
+        }
+
+        .word-list {
+            flex: 1;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            margin-top: 8px;
+            min-height: 0;
+        }
+
+        .word-item {
+            padding: 5px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+        }
+
+        .word-item:last-child {
+            border-bottom: none;
+        }
+
+        .word-item.pangram {
+            background-color: #fff3cd;
+            font-weight: bold;
+        }
+
+        .word-length {
+            color: #666;
+            font-size: 12px;
+        }
+
+        .status {
+            text-align: center;
+            margin: 8px 0;
+            font-style: italic;
+            color: #666;
+            font-size: 13px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <h3>🐝 Spelling Bee Solver</h3>
+    </div>
+
+    <div id="lettersDisplay" class="letters-display">
+        <div class="status">Visit NY Times Spelling Bee page to extract letters</div>
+    </div>
+
+    <div class="controls">
+        <button id="extractBtn" class="btn">Get Letters</button>
+        <button id="actualAnswersBtn" class="btn" disabled>Get Answers</button>
+    </div>
+
+    <div class="filter-controls">
+        <label>Min: <input type="number" id="minLength" value="4" min="4" max="15"></label>
+        <label>Max: <input type="number" id="maxLength" value="15" min="4" max="15"></label>
+        <label>Sort:
+            <select id="sortOrder">
+                <option value="shortest">Shortest first</option>
+                <option value="longest">Longest first</option>
+                <option value="alpha">A → Z</option>
+            </select>
+        </label>
+    </div>
+
+    <div id="wordList" class="word-list" style="display: none;"></div>
+
+    <div id="status" class="status"></div>
+
+    <script src="JS/popup.js"></script>
+</body>
+
+</html>

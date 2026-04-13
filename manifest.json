@@ -1,0 +1,31 @@
+{
+  "manifest_version": 3,
+  "name": "NY Times Spelling Bee Solver",
+  "version": "1.0",
+  "description": "Helps solve NY Times Spelling Bee puzzles by suggesting possible words",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "tabs",
+    "sidePanel"
+  ],
+  "side_panel": {
+    "default_path": "popup.html"
+  },
+  "host_permissions": [
+    "https://www.nytimes.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["https://www.nytimes.com/puzzles/spelling-bee*"],
+      "js": ["JS/content.js"],
+      "run_at": "document_end"
+    }
+  ],
+  "action": {
+    "default_title": "Spelling Bee Solver"
+  },
+  "background": {
+    "service_worker": "JS/background.js"
+  }
+}
